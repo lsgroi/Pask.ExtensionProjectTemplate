@@ -16,20 +16,31 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tasks", "tasks", "{38129D0C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{4DF18423-20ED-4AF5-9BD3-755C94AFD541}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A57795DC-8DD6-4078-ACD9-BF492ED79355}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet.Config = NuGet.Config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F5FE3157-021F-48A2-8A6D-9C6E061425F1}"
+	ProjectSection(SolutionItems) = preProject
+		appveyor.yml = appveyor.yml
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{022E6C5C-CF05-4F98-BF72-88DDA7C39C75}.Debug|x86.ActiveCfg = Debug|x86
-		{022E6C5C-CF05-4F98-BF72-88DDA7C39C75}.Debug|x86.Build.0 = Debug|x86
-		{022E6C5C-CF05-4F98-BF72-88DDA7C39C75}.Release|x86.ActiveCfg = Release|x86
-		{022E6C5C-CF05-4F98-BF72-88DDA7C39C75}.Release|x86.Build.0 = Release|x86
 		{3F49828A-2A6E-48A2-B311-96E040C51DB8}.Debug|x86.ActiveCfg = Debug|x86
 		{3F49828A-2A6E-48A2-B311-96E040C51DB8}.Debug|x86.Build.0 = Debug|x86
 		{3F49828A-2A6E-48A2-B311-96E040C51DB8}.Release|x86.ActiveCfg = Release|x86
 		{3F49828A-2A6E-48A2-B311-96E040C51DB8}.Release|x86.Build.0 = Release|x86
+		{022E6C5C-CF05-4F98-BF72-88DDA7C39C75}.Debug|x86.ActiveCfg = Debug|x86
+		{022E6C5C-CF05-4F98-BF72-88DDA7C39C75}.Debug|x86.Build.0 = Debug|x86
+		{022E6C5C-CF05-4F98-BF72-88DDA7C39C75}.Release|x86.ActiveCfg = Release|x86
+		{022E6C5C-CF05-4F98-BF72-88DDA7C39C75}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
