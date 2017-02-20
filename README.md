@@ -1,0 +1,1 @@
+# Pask.ExtensionProjectTemplate
