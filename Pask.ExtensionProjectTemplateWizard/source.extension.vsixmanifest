@@ -3,7 +3,7 @@
     <Metadata>
         <Identity Id="Pask.ExtensionProjectTemplateWizard.Luca Sgroi.74841f2a-3548-4ea2-b641-7396181d31d0" Version="1.0" Language="en-US" Publisher="Luca Sgroi" />
         <DisplayName>Pask.ExtensionProjectTemplateWizard</DisplayName>
-        <Description>Empty VSIX Project.</Description>
+        <Description>Project template for a Pask extension.</Description>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0]" />

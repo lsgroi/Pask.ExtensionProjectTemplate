@@ -1,4 +1,4 @@
-Import-Task Restore-NuGetPackages, Clean, Build
+Import-Task Restore-NuGetPackages, Clean, Build, Version-Assemblies, Version-BuildServer
 Set-Property BuildConfiguration -Value Release
 
 # Synopsis: Default task
@@ -11,4 +11,9 @@ Task Copy-VSIX {
 }
 
 # Synopsis: Release task
-Task Release Restore-NuGetPackages, Clean, Build, Copy-VSIX
+Task Release Version-BuildServer, Restore-NuGetPackages, Clean, Version-Assemblies, Version-VSIXManifest, Build, Copy-VSIX
+
+# Synopsis: Apply the current version to the VSIX manifest
+Task Version-VSIXManifest {
+
+}
