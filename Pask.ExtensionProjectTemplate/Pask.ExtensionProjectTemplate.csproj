@@ -153,7 +153,6 @@
     <None Include="packages.config" />
     <None Include="Pask.ExtensionProjectTemplate.nuspec" />
     <None Include="ProjectTemplate.csproj" />
-    <None Include="Pask.ExtensionProjectTemplate.ico" />
     <None Include="tools\Init.ps1" />
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +171,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Pask.ExtensionProjectTemplate.png" />
     <Content Include="readme.txt" />
     <Content Include="version.txt" />
   </ItemGroup>

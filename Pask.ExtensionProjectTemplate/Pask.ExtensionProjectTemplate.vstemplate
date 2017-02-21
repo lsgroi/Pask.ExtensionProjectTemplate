@@ -3,7 +3,7 @@
   <TemplateData>
     <Name>Pask Extension</Name>
     <Description>An extension for Pask.</Description>
-    <Icon>Pask.ExtensionProjectTemplate.ico</Icon>
+    <Icon>Pask.ExtensionProjectTemplate.png</Icon>
     <ProjectType>CSharp</ProjectType>
     <RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
     <SortOrder>1000</SortOrder>
