@@ -2,7 +2,7 @@
 <VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
   <TemplateData>
     <Name>Pask Extension</Name>
-    <Description>An extension for Pask.</Description>
+    <Description>Pask is a modular task-oriented build automation tool for .NET which invokes tasks defined in a PowerShell script. It provides a set of predefined tasks and the ability to easily create custom ones. This project template will create a Pask extension.</Description>
     <Icon>Pask.ExtensionProjectTemplate.png</Icon>
     <ProjectType>CSharp</ProjectType>
     <RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="Pask.ExtensionProjectTemplateWizard.Luca Sgroi.74841f2a-3548-4ea2-b641-7396181d31d0" Version="1.0" Language="en-US" Publisher="Luca Sgroi" />
-        <DisplayName>Pask.ExtensionProjectTemplateWizard</DisplayName>
-        <Description>Project template for a Pask extension.</Description>
+        <Identity Id="Pask.ExtensionProjectTemplateWizard" Version="1.0" Language="en-US" Publisher="Luca Sgroi" />
+        <DisplayName>Pask Extension</DisplayName>
+        <Description>Pask is a modular task-oriented build automation tool for .NET which invokes tasks defined in a PowerShell script. It provides a set of predefined tasks and the ability to easily create custom ones. This project template allows will create a Pask extension.</Description>
+        <MoreInfo>https://github.com/lsgroi/Pask</MoreInfo>
+        <Tags>Invoke-Build PowerShell BuildAutomation</Tags>
+        <Icon>Pask.ExtensionProjectTemplate.png</Icon>
+        <License>LICENCE.txt</License>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0]" />

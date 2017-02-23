@@ -1,4 +1,4 @@
-Pask Extension Project Template - PowerShell Build Automation for .NET 
+Pask.ExtensionProjectTemplate - PowerShell Build Automation for .NET 
 Copyright (c) 2016 Luca Sgroi
 
 Licensed under the Apache License, Version 2.0 (the "License");

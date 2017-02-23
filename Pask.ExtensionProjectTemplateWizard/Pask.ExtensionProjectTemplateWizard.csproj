@@ -73,6 +73,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\LICENSE.txt">
+      <Link>LICENSE.txt</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="..\Pask.ExtensionProjectTemplate\Pask.ExtensionProjectTemplate.png">
+      <Link>Pask.ExtensionProjectTemplate.png</Link>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="index.html" />
     <Content Include="stylesheet.css" />
   </ItemGroup>
