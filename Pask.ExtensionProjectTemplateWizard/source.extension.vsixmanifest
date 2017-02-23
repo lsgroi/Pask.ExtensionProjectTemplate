@@ -7,7 +7,7 @@
         <MoreInfo>https://github.com/lsgroi/Pask</MoreInfo>
         <Tags>Invoke-Build PowerShell BuildAutomation</Tags>
         <Icon>Pask.ExtensionProjectTemplate.png</Icon>
-        <License>LICENCE.txt</License>
+        <License>LICENSE.txt</License>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0]" />
