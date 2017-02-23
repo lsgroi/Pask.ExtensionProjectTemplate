@@ -2,6 +2,7 @@ Import-Task Restore-NuGetPackages, Clean, Build, Version-Assemblies, Version-Bui
 
 Set-Property BuildConfiguration -Value Release
 Set-Property Version -Value (Get-SemanticVersion "0.1.0")
+Set-Property ExcludeAssemblyInfo  -Value @("Pask.ExtensionProjectTemplate\AssemblyInfo.cs")
 
 # Synopsis: Default task
 Task . Restore-NuGetPackages, Clean, Build, Copy-VSIX
@@ -21,4 +22,10 @@ Task Version-VSIXManifest {
     [xml]$VSIXManifest = Get-Content $VSIXManifestFile
     $VSIXManifest.PackageManifest.Metadata.Identity.Version = $Version.SemVer
     $VSIXManifest.Save($VSIXManifestFile)
+    $VSTemplateFile = Join-Path $SolutionFullPath "Pask.ExtensionProjectTemplate\Pask.ExtensionProjectTemplate.vstemplate"
+    [xml]$VSTemplate = Get-Content $VSTemplateFile
+    $Assembly = $VSTemplate.VSTemplate.WizardExtension.Assembly -split ","
+    $Assembly[1] = "Version=$($Version.AssemblySemVer)"
+    $VSTemplate.VSTemplate.WizardExtension.Assembly = $Assembly -join ","
+    $VSTemplate.Save($VSTemplateFile)
 }
