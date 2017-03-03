@@ -50,7 +50,7 @@ namespace Pask.ExtensionProjectTemplateWizard
             var nugetFolder = EnvDteExtensions.GetSolutionFolders(_solution).FirstOrDefault(x => x.Name == ".nuget") ?? _solution.AddSolutionFolder(".nuget");
             if (!File.Exists(Path.Combine(solutionDir, ".gitignore"))) File.Copy(Path.Combine(initDir, ".gitignore"), Path.Combine(solutionDir, ".gitignore"));
             if (!File.Exists(Path.Combine(solutionDir, "NuGet.Config"))) File.Copy(Path.Combine(initDir, "NuGet.Config"), Path.Combine(solutionDir, "NuGet.Config"));
-            if (EnvDteExtensions.GetProjectItem(nugetFolder, "Nuget.config") == null) solutionItemsFolder.ProjectItems.AddFromFile(Path.Combine(solutionDir, "NuGet.Config"));
+            if (EnvDteExtensions.GetProjectItem(nugetFolder, "NuGet.config") == null) nugetFolder.ProjectItems.AddFromFile(Path.Combine(solutionDir, "NuGet.Config"));
             if (!File.Exists(Path.Combine(solutionDir, "README.md"))) File.Copy(Path.Combine(initDir, "README.md"), Path.Combine(solutionDir, "README.md"));
             if (EnvDteExtensions.GetProjectItem(solutionItemsFolder, "README.md") == null) solutionItemsFolder.ProjectItems.AddFromFile(Path.Combine(solutionDir, "README.md"));
             if (!File.Exists(Path.Combine(buildDir, "build.ps1"))) File.Copy(Path.Combine(initDir, ".build", "build.ps1"), Path.Combine(buildDir, "build.ps1"));
