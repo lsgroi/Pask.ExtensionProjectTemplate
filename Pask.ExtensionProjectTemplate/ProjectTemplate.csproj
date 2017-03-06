@@ -47,14 +47,15 @@
 		<Compile Include="Properties\AssemblyInfo.cs" />
         <None Include="version.txt" />
         <None Include="readme.txt" />
-        <None Include="tools\Init.ps1" />
         <None Include="$safeprojectname$.nuspec" />
-        <None Include="init\.gitignore" />
-        <None Include="init\NuGet.config" />
-        <None Include="init\README.md" />
+        <None Include="tools\Init.ps1" />
         <Folder Include="scripts\" />
         <Folder Include="tasks\" />
         <None Include="init\.build\build.ps1" />
+        <None Include="init\.build\scripts\Properties.ps1" />
+        <None Include="init\.gitignore" />
+        <None Include="init\NuGet.config" />
+        <None Include="init\README.md" />
     </ItemGroup>
     <Target Name="Clean">
         <Exec Command="go.bat Clean" WorkingDirectory="$(SolutionDir)" />

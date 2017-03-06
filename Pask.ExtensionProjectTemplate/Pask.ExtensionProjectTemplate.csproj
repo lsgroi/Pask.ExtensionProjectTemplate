@@ -147,6 +147,7 @@
   <ItemGroup>
     <None Include="AssemblyInfo.cs" />
     <None Include="init\.build\build.ps1" />
+    <None Include="init\.build\scripts\Properties.ps1" />
     <None Include="init\.gitignore" />
     <None Include="init\NuGet.Config" />
     <None Include="init\README.md" />

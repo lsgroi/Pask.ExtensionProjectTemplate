@@ -1,0 +1,1 @@
+﻿Set-Property Version -Value (Get-ProjectSemanticVersion)

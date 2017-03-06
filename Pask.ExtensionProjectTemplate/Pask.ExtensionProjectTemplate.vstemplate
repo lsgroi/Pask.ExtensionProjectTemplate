@@ -28,6 +28,9 @@
         <Folder Name="scripts" />
         <Folder Name="tasks" />
         <Folder Name=".build">
+          <Folder Name="scripts">
+              <ProjectItem>Properties.ps1</ProjectItem>    
+          </Folder>
           <ProjectItem>build.ps1</ProjectItem>
         </Folder>
       </Folder>

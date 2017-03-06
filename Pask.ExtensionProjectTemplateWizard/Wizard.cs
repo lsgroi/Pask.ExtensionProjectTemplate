@@ -46,6 +46,7 @@ namespace Pask.ExtensionProjectTemplateWizard
             // Add solution items
             var initDir = Path.Combine(projectDir, "init");
             var buildDir = Directory.Exists(Path.Combine(solutionDir, ".build")) ? Path.Combine(solutionDir, ".build") : FileSystemExtensions.CreateDirectory(Path.Combine(solutionDir, ".build"));
+            var scriptsDir = Directory.Exists(Path.Combine(buildDir, "scripts")) ? Path.Combine(buildDir, "scripts") : FileSystemExtensions.CreateDirectory(Path.Combine(buildDir, "scripts"));
             var solutionItemsFolder = EnvDteExtensions.GetSolutionFolders(_solution).FirstOrDefault(x => x.Name == "Solution Items") ?? _solution.AddSolutionFolder("Solution Items");
             var nugetFolder = EnvDteExtensions.GetSolutionFolders(_solution).FirstOrDefault(x => x.Name == ".nuget") ?? _solution.AddSolutionFolder(".nuget");
             if (!File.Exists(Path.Combine(solutionDir, ".gitignore"))) File.Copy(Path.Combine(initDir, ".gitignore"), Path.Combine(solutionDir, ".gitignore"));
@@ -54,6 +55,7 @@ namespace Pask.ExtensionProjectTemplateWizard
             if (!File.Exists(Path.Combine(solutionDir, "README.md"))) File.Copy(Path.Combine(initDir, "README.md"), Path.Combine(solutionDir, "README.md"));
             if (EnvDteExtensions.GetProjectItem(solutionItemsFolder, "README.md") == null) solutionItemsFolder.ProjectItems.AddFromFile(Path.Combine(solutionDir, "README.md"));
             if (!File.Exists(Path.Combine(buildDir, "build.ps1"))) File.Copy(Path.Combine(initDir, ".build", "build.ps1"), Path.Combine(buildDir, "build.ps1"));
+            if (!File.Exists(Path.Combine(scriptsDir, "Properties.ps1"))) File.Copy(Path.Combine(initDir, ".build", "scripts", "Properties.ps1"), Path.Combine(scriptsDir, "Properties.ps1"));
 
             // Delete init directory
             EnvDteExtensions.DeleteProjectItem(project, "init");
@@ -63,6 +65,7 @@ namespace Pask.ExtensionProjectTemplateWizard
             var installerServices = componentModel.GetService<IVsPackageInstallerServices>();
             if (installerServices.IsPackageInstalled(project, "Pask")) return;
             var installer = componentModel.GetService<IVsPackageInstaller>();
+            installer.InstallPackage("https://api.nuget.org/v3/index.json", project, "Invoke-Build", (System.Version)null, false);
             installer.InstallPackage("https://api.nuget.org/v3/index.json", project, "Pask", (System.Version)null, false);
 
             _dte.Documents.CloseAll();
