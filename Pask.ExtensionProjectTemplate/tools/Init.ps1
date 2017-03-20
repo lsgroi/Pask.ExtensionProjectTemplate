@@ -11,6 +11,7 @@ if ($Project -eq $null) {
 
 $Solution = Get-Interface $dte.Solution ([EnvDTE80.Solution2])
 $SolutionFullPath = Split-Path -Path $Solution.FullName
+$ProjectFullPath = Split-Path -Path $Project.FullName
 
 $PackagesConfig = Join-Path (Split-Path -Path $Project.FullName) "packages.config"
 [xml]$PackagesXml = Get-Content $PackagesConfig
