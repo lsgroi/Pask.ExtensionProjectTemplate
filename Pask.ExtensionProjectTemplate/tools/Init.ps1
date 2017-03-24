@@ -22,6 +22,9 @@ if ($Package -ne $null) {
     Write-Host "Initializing '$($Package.Id) $($Package.Version)'."
 
     # Code here any initialization
+    
+    # Save the solution
+    # $Solution.SaveAs($Solution.FullName)
 
     # Open the readme.txt
     # $Window = $dte.ItemOperations.OpenFile($(Join-Path $InstallPath "readme.txt"))
