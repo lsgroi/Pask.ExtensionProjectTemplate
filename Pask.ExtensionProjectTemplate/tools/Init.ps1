@@ -24,5 +24,5 @@ if ($Package -ne $null) {
     # Code here any initialization
 
     # Open the readme.txt
-    $Window = $dte.ItemOperations.OpenFile($(Join-Path $InstallPath "readme.txt"))
+    # $Window = $dte.ItemOperations.OpenFile($(Join-Path $InstallPath "readme.txt"))
 }

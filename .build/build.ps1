@@ -1,7 +1,7 @@
 Import-Task Restore-NuGetPackages, Clean, Build, Version-Assemblies, Version-BuildServer
 
 Set-Property BuildConfiguration -Value Release
-Set-Property Version -Value (Get-SemanticVersion "0.1.9")
+Set-Property Version -Value (Get-SemanticVersion "0.2.0")
 Set-Property ExcludeAssemblyInfo  -Value @("Pask.ExtensionProjectTemplate\AssemblyInfo.cs")
 
 # Synopsis: Default task
