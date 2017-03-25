@@ -16,7 +16,6 @@
     <Project File="ProjectTemplate.csproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
       <ProjectItem>version.txt</ProjectItem>
-      <ProjectItem ReplaceParameters="true">readme.txt</ProjectItem>
       <Folder Name="tools">
         <ProjectItem>Init.ps1</ProjectItem>
       </Folder>

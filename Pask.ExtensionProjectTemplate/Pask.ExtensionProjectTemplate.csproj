@@ -173,7 +173,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Pask.ExtensionProjectTemplate.png" />
-    <Content Include="readme.txt" />
     <Content Include="version.txt" />
   </ItemGroup>
   <ItemGroup>

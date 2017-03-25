@@ -46,7 +46,6 @@
 	<ItemGroup>
 		<Compile Include="Properties\AssemblyInfo.cs" />
         <None Include="version.txt" />
-        <None Include="readme.txt" />
         <None Include="$safeprojectname$.nuspec" />
         <None Include="tools\Init.ps1" />
         <Folder Include="scripts\" />
