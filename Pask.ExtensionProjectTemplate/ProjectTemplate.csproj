@@ -45,17 +45,16 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Include="Properties\AssemblyInfo.cs" />
-        <None Include="version.txt" />
         <None Include="$safeprojectname$.nuspec" />
         <None Include="tools\Init.ps1" />
         <Folder Include="scripts\" />
         <Folder Include="tasks\" />
         <None Include="init\.build\build.ps1" />
-        <None Include="init\.build\scripts\Properties.ps1" />
         <None Include="init\.gitignore" />
         <None Include="init\NuGet.config" />
         <None Include="init\README.md" />
     </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <Target Name="Clean">
         <Exec Command="go.bat Clean" WorkingDirectory="$(SolutionDir)" />
     </Target>
@@ -65,7 +64,6 @@
     <Target Name="Rebuild">
         <Exec Command="go.bat" WorkingDirectory="$(SolutionDir)" />
     </Target>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -73,4 +71,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
- </Project>
+</Project>

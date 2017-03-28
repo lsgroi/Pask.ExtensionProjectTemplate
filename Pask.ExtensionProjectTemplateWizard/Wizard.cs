@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.ComponentModelHost;
@@ -16,6 +17,7 @@ namespace Pask.ExtensionProjectTemplateWizard
         private DTE _dte;
         private Solution2 _solution;
         private string _projectName;
+        private Dictionary<string, string> _replacementDictionary;
 
         /// Runs custom wizard logic at the beginning of a template wizard run.
         /// <param name="automationObject">The automation object being used by the template wizard.</param>
@@ -27,7 +29,7 @@ namespace Pask.ExtensionProjectTemplateWizard
             _dte = automationObject as DTE;
             _solution = _dte.Solution as Solution2;
             _projectName = replacementsDictionary["$safeprojectname$"];
-
+            _replacementDictionary = replacementsDictionary;
         }
 
         /// Runs custom wizard logic when a project has finished generating
@@ -46,7 +48,6 @@ namespace Pask.ExtensionProjectTemplateWizard
             // Add solution items
             var initDir = Path.Combine(projectDir, "init");
             var buildDir = Directory.Exists(Path.Combine(solutionDir, ".build")) ? Path.Combine(solutionDir, ".build") : FileSystemExtensions.CreateDirectory(Path.Combine(solutionDir, ".build"));
-            var scriptsDir = Directory.Exists(Path.Combine(buildDir, "scripts")) ? Path.Combine(buildDir, "scripts") : FileSystemExtensions.CreateDirectory(Path.Combine(buildDir, "scripts"));
             var solutionItemsFolder = EnvDteExtensions.GetSolutionFolders(_solution).FirstOrDefault(x => x.Name == "Solution Items") ?? _solution.AddSolutionFolder("Solution Items");
             var nugetFolder = EnvDteExtensions.GetSolutionFolders(_solution).FirstOrDefault(x => x.Name == ".nuget") ?? _solution.AddSolutionFolder(".nuget");
             if (!File.Exists(Path.Combine(solutionDir, ".gitignore"))) File.Copy(Path.Combine(initDir, ".gitignore"), Path.Combine(solutionDir, ".gitignore"));
@@ -55,18 +56,26 @@ namespace Pask.ExtensionProjectTemplateWizard
             if (!File.Exists(Path.Combine(solutionDir, "README.md"))) File.Copy(Path.Combine(initDir, "README.md"), Path.Combine(solutionDir, "README.md"));
             if (EnvDteExtensions.GetProjectItem(solutionItemsFolder, "README.md") == null) solutionItemsFolder.ProjectItems.AddFromFile(Path.Combine(solutionDir, "README.md"));
             if (!File.Exists(Path.Combine(buildDir, "build.ps1"))) File.Copy(Path.Combine(initDir, ".build", "build.ps1"), Path.Combine(buildDir, "build.ps1"));
-            if (!File.Exists(Path.Combine(scriptsDir, "Properties.ps1"))) File.Copy(Path.Combine(initDir, ".build", "scripts", "Properties.ps1"), Path.Combine(scriptsDir, "Properties.ps1"));
 
             // Delete init directory
             EnvDteExtensions.DeleteProjectItem(project, "init");
 
-            // Install Pask
-            var componentModel = (IComponentModel) Package.GetGlobalService(typeof(SComponentModel));
-            var installerServices = componentModel.GetService<IVsPackageInstallerServices>();
-            if (installerServices.IsPackageInstalled(project, "Pask")) return;
-            var installer = componentModel.GetService<IVsPackageInstaller>();
-            installer.InstallPackage("https://api.nuget.org/v3/index.json", project, "Invoke-Build", (System.Version)null, false);
-            installer.InstallPackage("https://api.nuget.org/v3/index.json", project, "Pask", (System.Version)null, false);
+            // Install Pask.Nuget and Pester
+            var componentModel = (IComponentModel)Package.GetGlobalService(typeof(SComponentModel));
+            var packageInstaller = componentModel.GetService<IVsPackageInstaller>();
+            packageInstaller.InstallPackage("https://api.nuget.org/v3/index.json", project, "Pask.Nuget", (System.Version)null, false);
+            packageInstaller.InstallPackage("https://api.nuget.org/v3/index.json", project, "Pester", (System.Version)null, false);
+
+            // Set Pask dependency version in the .nuspec file
+            var packageInstallerServices = componentModel.GetService<IVsPackageInstallerServices>();
+            var paskPackage = packageInstallerServices.GetInstalledPackages().Single(p => p.Id == "Pask");
+            var projectItems = project.ProjectItems.GetEnumerator();
+            while(projectItems.MoveNext()) {
+                var projectItem = projectItems.Current as ProjectItem;
+                if (projectItem == null || projectItem.Name != $"{_projectName}.nuspec") continue;
+                var fileName = projectItem.FileNames[1];
+                File.WriteAllText(fileName, File.ReadAllText(fileName).Replace("$paskversion$", paskPackage.VersionString));
+            }
 
             _dte.Documents.CloseAll();
         }

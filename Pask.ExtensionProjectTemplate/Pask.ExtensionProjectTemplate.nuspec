@@ -4,7 +4,7 @@
     <id>$id$</id>
     <version>$version$</version>
     <title>$id$</title>
-    <authors>$registeredorganization$</authors>
+    <authors>$username$</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <developmentDependency>true</developmentDependency>
     <iconUrl>https://raw.githubusercontent.com/lsgroi/Pask/master/Pask.png</iconUrl>
@@ -12,7 +12,7 @@
     <description>$projectname$</description>
     <tags>Invoke-Build PowerShell BuildAutomation Pask</tags>
     <dependencies>
-      <dependency id="Pask" />
+      <dependency id="Pask" version="$paskversion$" />
     </dependencies>
   </metadata>
   <files>

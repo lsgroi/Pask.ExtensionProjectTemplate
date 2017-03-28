@@ -15,7 +15,6 @@
   <TemplateContent>
     <Project File="ProjectTemplate.csproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
-      <ProjectItem>version.txt</ProjectItem>
       <Folder Name="tools">
         <ProjectItem>Init.ps1</ProjectItem>
       </Folder>
@@ -27,9 +26,6 @@
         <Folder Name="scripts" />
         <Folder Name="tasks" />
         <Folder Name=".build">
-          <Folder Name="scripts">
-              <ProjectItem>Properties.ps1</ProjectItem>    
-          </Folder>
           <ProjectItem>build.ps1</ProjectItem>
         </Folder>
       </Folder>
