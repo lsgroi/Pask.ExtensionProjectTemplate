@@ -1,14 +1,18 @@
-Import-Task Restore-NuGetPackages, Clean, Build, Version-Assemblies, Version-BuildServer
+﻿Set-Property GitHubOwner -Value "lsgroi"
+Set-Property GitHubRepo -Value $ProjectName
+Set-Property ReleaseAssetPattern -Value "Pask.ExtensionProjectTemplate"
+
+Import-Task Restore-NuGetPackages, Clean, Build, Version-Assemblies, Version-BuildServer, New-GitHubRelease
 
 Set-Property BuildConfiguration -Value Release
-Set-Property Version -Value (Get-SemanticVersion "0.5.0")
+Set-Property Version -Value (Get-SemanticVersion "0.6.0")
 Set-Property ExcludeAssemblyInfo  -Value @("Pask.ExtensionProjectTemplate\AssemblyInfo.cs")
 
 # Synopsis: Default task
 Task . Restore-NuGetPackages, Clean, Build, Copy-VSIX
 
 # Synopsis: Release task
-Task Release Version-BuildServer, Restore-NuGetPackages, Clean, Version-Assemblies, Version-VSIXManifest, Build, Copy-VSIX
+Task Release Version-BuildServer, Restore-NuGetPackages, Clean, Version-Assemblies, Version-VSIXManifest, Build, Copy-VSIX, New-GitHubRelease
 
 # Synopsis: Copy the Visual Studio Extension Installer to the build output directory
 Task Copy-VSIX {
