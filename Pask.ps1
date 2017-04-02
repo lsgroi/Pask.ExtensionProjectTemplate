@@ -25,8 +25,8 @@ Tells to show summary information after the build.
 .PARAMETER Properties
 A set of properties passed to the build script.
 
-.PARAMETER SolutionPath
-The relative path to the solution directory.
+.PARAMETER SolutionFilePath
+The relative path to the solution file.
 
 .PARAMETER SolutionName
 Base name of the solution.
@@ -40,23 +40,33 @@ Tells to visualize specified build task tree as indented text with brief task de
 
 param(
     # Invoke-Build specific parameters
-    [Parameter(Position=0)][string[]]$Task = ".",
-    $Result,
-    [switch]$Safe,
-    [switch]$Summary = $true,
+    [Alias("Task")][Parameter(Position=0)][string[]]$private:PaskTask = ".",
+    [Alias("Result")]$private:PaskResult,
+    [Alias("Safe")][switch]$private:PaskSafe,
+    [Alias("Summary")][switch]$private:PaskSummary = $true,
     [Parameter(ValueFromRemainingArguments=$true)]$Properties,
     
     # Pask specific parameters
-    [string]$SolutionPath,
-    [string]$SolutionName = (Get-ChildItem -Path (Join-Path $PSScriptRoot $SolutionPath) *.sln | Select-Object -First 1).BaseName,
-    [string]$ProjectName = $SolutionName,
+    [string]$SolutionFilePath,
+    [string]$SolutionName,
+    [string]$ProjectName,
     [switch]$Tree
 )
 
 $ErrorActionPreference = "Stop"
 
+# Default parameters
+$private:CurrentLocation = Get-Location
+$private:ScriptFullPath = if ($PSScriptRoot -ne $null) { $PSScriptRoot } else { Split-Path $MyInvocation.MyCommand.Path -Parent }
+if (-not $SolutionName) {
+    $SolutionName = (Get-ChildItem -Path (Join-Path $ScriptFullPath $SolutionFilePath) *.sln | Sort-Object -Descending | Select-Object -First 1).BaseName
+}
+if (-not $ProjectName) {
+    $ProjectName = $SolutionName
+}
+
 # Include Pask script
-$private:PaskScriptFullName = Join-Path $PSScriptRoot ".build\scripts\Pask.ps1"
+$private:PaskScriptFullName = Join-Path $ScriptFullPath ".build\scripts\Pask.ps1"
 . $PaskScriptFullName
 
 # Expose properties passed to the script
@@ -65,25 +75,28 @@ for ($i=0; $i -lt $Properties.Count; $i+=2) {
 }
 
 # Set default properties
-Set-BuildProperty -Name SolutionFullPath -Value (Join-Path $PSScriptRoot $SolutionPath)
+Set-BuildProperty -Name PaskFullPath -Value $ScriptFullPath
+Set-BuildProperty -Name SolutionName -Value $SolutionName
+Set-BuildProperty -Name SolutionFullPath -Value (Join-Path $PaskFullPath $SolutionFilePath)
 Set-BuildProperty -Name SolutionFullName -Value (Join-Path $SolutionFullPath "$SolutionName.sln")
-Set-BuildProperty -Name BuildFullPath -Value (Join-Path $PSScriptRoot ".build")
+Set-BuildProperty -Name BuildFullPath -Value (Join-Path $PaskFullPath ".build")
 Set-BuildProperty -Name BuildOutputFullPath -Value (Join-Path $BuildFullPath "output")
 Set-BuildProperty -Name TestsArtifactFullPath -Value (Join-Path $BuildOutputFullPath "Tests")
 Set-BuildProperty -Name TestsResultsFullPath -Value (Join-Path $BuildOutputFullPath "TestsResults")
 
 # Test solution existence
-if(-not (Test-Path $SolutionFullName)) { Write-Error "Cannot find solution in $SolutionFullPath" }
+if(-not (Test-Path $SolutionFullName)) { Write-Error "Cannot find '$SolutionName' solution in '$SolutionFullPath'" }
 
 # Restore NuGet packages marked as development-only-dependency
 Write-BuildMessage -Message "Restore NuGet development dependencies" -ForegroundColor "Cyan"
 Restore-NuGetDevelopmentPackages
 
+# Dot source Invoke-Build
+$private:InvokeBuildScript = Join-Path (Get-PackageDir "Invoke-Build") "tools\Invoke-Build.ps1"
+. $private:InvokeBuildScript
+
 # Define the default project
 Set-Project -Name $ProjectName
-
-# Set Invoke-Build alias
-Set-Alias Invoke-Build (Join-Path (Get-PackageDir "Invoke-Build") "tools\Invoke-Build.ps1") -Scope Script
 
 # Invoke the build
 $private:BuildScript = New-Item -ItemType File -Name "$([System.IO.Path]::GetRandomFileName()).ps1" -Path $Env:Temp -Value {
@@ -94,13 +107,16 @@ $private:BuildScript = New-Item -ItemType File -Name "$([System.IO.Path]::GetRan
 if ($Tree) {
     Write-BuildMessage -Message "Show build task tree" -ForegroundColor "Cyan"
     Import-Script Show-BuildTree
-    Show-BuildTree -File "$($BuildScript.FullName)" -Task $Task
+    Show-BuildTree -File "$($BuildScript.FullName)" -Task $private:PaskTask
 } else {
-    Invoke-Build -File "$($BuildScript.FullName)" -Task $Task -Result "!BuildResult!" -Safe:$Safe -Summary:$Summary
-    if ($Result -and $Result -is [string]) {
-        New-Variable -Name $Result -Force -Scope 1 -Value ${!BuildResult!}
-    } elseif ($Result) {
-        $Result.Value = ${!BuildResult!}
+    Invoke-Build -File "$($BuildScript.FullName)" -Task $private:PaskTask -Result "!InvokeBuildResult!" -Safe:$private:PaskSafe -Summary:$private:PaskSummary
+    if ($private:PaskResult -and $private:PaskResult -is [string]) {
+        New-Variable -Name $private:PaskResult -Force -Scope 1 -Value ${!InvokeBuildResult!}
+    } elseif ($private:PaskResult) {
+        $private:PaskResult.Value = ${!InvokeBuildResult!}
     }
 }
 Remove-Item "$($BuildScript.FullName)" -Force
+
+# Dot-sourcing Invoke-Build the current location changes to $BuildRoot
+Set-Location -Path $private:CurrentLocation.Path

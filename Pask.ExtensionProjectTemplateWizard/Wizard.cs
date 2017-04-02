@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Xml;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.ComponentModelHost;
@@ -62,19 +63,37 @@ namespace Pask.ExtensionProjectTemplateWizard
 
             // Install Pask.Nuget and Pester
             var componentModel = (IComponentModel)Package.GetGlobalService(typeof(SComponentModel));
-            var packageInstaller = componentModel.GetService<IVsPackageInstaller>();
-            packageInstaller.InstallPackage("https://api.nuget.org/v3/index.json", project, "Pask.Nuget", (System.Version)null, false);
-            packageInstaller.InstallPackage("https://api.nuget.org/v3/index.json", project, "Pester", (System.Version)null, false);
+            var packageInstaller = componentModel.GetService<IVsPackageInstaller2>();
+            packageInstaller.InstallLatestPackage("https://api.nuget.org/v3/index.json", project, "Pask.Nuget", false, false);
+            packageInstaller.InstallLatestPackage("https://api.nuget.org/v3/index.json", project, "Pester", false, false);
 
-            // Set Pask dependency version in the .nuspec file
+            // Modify project files
             var packageInstallerServices = componentModel.GetService<IVsPackageInstallerServices>();
             var paskPackage = packageInstallerServices.GetInstalledPackages().Single(p => p.Id == "Pask");
             var projectItems = project.ProjectItems.GetEnumerator();
             while(projectItems.MoveNext()) {
                 var projectItem = projectItems.Current as ProjectItem;
-                if (projectItem == null || projectItem.Name != $"{_projectName}.nuspec") continue;
-                var fileName = projectItem.FileNames[1];
-                File.WriteAllText(fileName, File.ReadAllText(fileName).Replace("$paskversion$", paskPackage.VersionString));
+                if (projectItem == null) continue;
+                if (projectItem.Name == $"{_projectName}.nuspec") {
+                    // Set Pask dependency version in the.nuspec file
+                    var fileName = projectItem.FileNames[1];
+                    File.WriteAllText(fileName, File.ReadAllText(fileName).Replace("$paskversion$", paskPackage.VersionString));
+                } else if(projectItem.Name == "readme.txt") {
+                    // Delete readme.txt
+                    projectItem.Delete();
+                } else if (projectItem.Name == "packages.config") {
+                    // Set Pester to development dependency
+                    var fileName = projectItem.FileNames[1];
+                    var xmlDocument = new XmlDocument();
+                    xmlDocument.Load(fileName);
+                    var pester = xmlDocument.GetElementsByTagName("package")
+                        .Cast<XmlNode>()
+                        .SingleOrDefault(p => p.Attributes != null && p.Attributes["id"].InnerText == "Pester");
+                    var attribute = xmlDocument.CreateAttribute("developmentDependency");
+                    attribute.Value = "true";
+                    pester?.Attributes?.Append(attribute);
+                    xmlDocument.Save(fileName);
+                }
             }
 
             _dte.Documents.CloseAll();
