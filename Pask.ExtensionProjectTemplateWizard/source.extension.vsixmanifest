@@ -6,6 +6,7 @@
         <Description>Pask is a modular task-oriented build automation tool for .NET which invokes tasks defined in a PowerShell script. It provides a set of predefined tasks and the ability to easily create custom ones. This project template allows will create a Pask extension.</Description>
         <MoreInfo>https://github.com/lsgroi/Pask</MoreInfo>
         <License>LICENSE.txt</License>
+        <ReleaseNotes>https://github.com/lsgroi/Pask.ExtensionProjectTemplate/releases</ReleaseNotes>
         <Icon>Pask.ExtensionProjectTemplate.png</Icon>
         <Tags>Invoke-Build PowerShell BuildAutomation</Tags>
     </Metadata>
