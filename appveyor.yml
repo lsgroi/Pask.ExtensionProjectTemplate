@@ -5,6 +5,8 @@
       - master
   skip_tags: true
   version: '{build}'
+  init:
+    - git config --global core.autocrlf true
   image: Visual Studio 2017
   environment:
     GitHubToken:
@@ -23,6 +25,8 @@
       - master
   skip_tags: true
   version: '{build}'
+  init:
+    - git config --global core.autocrlf true
   image: Visual Studio 2017
   build_script:
     - ps: .\Pask.ps1
