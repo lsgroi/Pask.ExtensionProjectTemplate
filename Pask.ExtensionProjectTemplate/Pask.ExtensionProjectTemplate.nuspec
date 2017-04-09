@@ -10,7 +10,7 @@
     <iconUrl>https://raw.githubusercontent.com/lsgroi/Pask/master/Pask.png</iconUrl>
     <summary>$projectname$</summary>
     <description>$projectname$</description>
-    <tags>Invoke-Build PowerShell BuildAutomation Pask</tags>
+    <tags>PowerShell Build Automation Script Invoke-Build Pask</tags>
     <dependencies>
       <dependency id="Pask" version="$paskversion$" />
     </dependencies>

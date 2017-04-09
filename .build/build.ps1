@@ -5,7 +5,7 @@ Set-Property ReleaseAssetPattern -Value "Pask.ExtensionProjectTemplate"
 Import-Task Restore-NuGetPackages, Clean, Build, Version-Assemblies, Version-BuildServer, New-GitHubRelease
 
 Set-Property BuildConfiguration -Value Release
-Set-Property Version -Value (Get-SemanticVersion "0.11.0")
+Set-Property Version -Value (Get-SemanticVersion "0.12.0")
 Set-Property ExcludeAssemblyInfo  -Value @("Pask.ExtensionProjectTemplate\AssemblyInfo.cs")
 
 # Synopsis: Default task

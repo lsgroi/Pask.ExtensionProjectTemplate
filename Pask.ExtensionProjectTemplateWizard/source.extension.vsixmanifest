@@ -8,7 +8,7 @@
         <License>LICENSE</License>
         <ReleaseNotes>https://github.com/lsgroi/Pask.ExtensionProjectTemplate/releases</ReleaseNotes>
         <Icon>Pask.ExtensionProjectTemplate.png</Icon>
-        <Tags>Invoke-Build PowerShell BuildAutomation</Tags>
+        <Tags>PowerShell Build Automation Script Invoke-Build</Tags>
     </Metadata>
     <Installation>
         <InstallationTarget Version="[15.0,16.0)" Id="Microsoft.VisualStudio.Community" />
