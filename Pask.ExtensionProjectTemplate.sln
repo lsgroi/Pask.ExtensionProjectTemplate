@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.0
+VisualStudioVersion = 15.0.26403.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pask.ExtensionProjectTemplateWizard", "Pask.ExtensionProjectTemplateWizard\Pask.ExtensionProjectTemplateWizard.csproj", "{3F49828A-2A6E-48A2-B311-96E040C51DB8}"
 EndProject
