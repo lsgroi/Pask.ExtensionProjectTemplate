@@ -2,7 +2,7 @@
 
 # Pask Extension Project Template
 
-[![Build status](https://ci.appveyor.com/api/projects/status/vqitbskgcp2t6bn3?svg=true)](https://ci.appveyor.com/project/LucaSgroi/pask-extensionprojecttemplate)
+[![Build status](https://ci.appveyor.com/api/projects/status/vqitbskgcp2t6bn3/branch/master?svg=true)](https://ci.appveyor.com/project/LucaSgroi/pask-extensionprojecttemplate/branch/master)
 
 Authoring new extensions is much easier with the Visual Studio 2017 [project template](https://marketplace.visualstudio.com/items?itemName=lsgroi.PaskExtension). It adds automatically the basic Pask structure to focus right away on building new tasks and scripts.  
 
