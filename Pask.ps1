@@ -39,18 +39,18 @@ Tells to visualize specified build task tree as indented text with brief task de
 #>
 
 param(
+    # Pask specific parameters
+    [string]$SolutionFilePath,
+    [string]$SolutionName,
+    [string]$ProjectName,
+    [switch]$Tree,
+
     # Invoke-Build specific parameters
     [Alias("Task")][Parameter(Position=0)][string[]]$private:PaskTask = ".",
     [Alias("Result")]$private:PaskResult,
     [Alias("Safe")][switch]$private:PaskSafe,
     [Alias("Summary")][switch]$private:PaskSummary = $true,
-    [Parameter(ValueFromRemainingArguments=$true)]$Properties,
-    
-    # Pask specific parameters
-    [string]$SolutionFilePath,
-    [string]$SolutionName,
-    [string]$ProjectName,
-    [switch]$Tree
+    [Parameter(ValueFromRemainingArguments=$true)]$Properties
 )
 
 $ErrorActionPreference = "Stop"
@@ -80,7 +80,7 @@ Set-BuildProperty -Name SolutionFullPath -Value (Join-Path $PaskFullPath $Soluti
 Set-BuildProperty -Name SolutionFullName -Value (Join-Path $SolutionFullPath "$SolutionName.sln")
 Set-BuildProperty -Name BuildFullPath -Value (Join-Path $PaskFullPath ".build")
 Set-BuildProperty -Name BuildOutputFullPath -Value (Join-Path $BuildFullPath "output")
-Set-BuildProperty -Name TestsResultsFullPath -Value (Join-Path $BuildOutputFullPath "TestsResults")
+Set-BuildProperty -Name TestResultsFullPath -Value (Join-Path $BuildOutputFullPath "TestResults")
 
 # Test solution existence
 if(-not (Test-Path $SolutionFullName)) { Write-Error "Cannot find '$SolutionName' solution in '$SolutionFullPath'" }
@@ -89,31 +89,37 @@ if(-not (Test-Path $SolutionFullName)) { Write-Error "Cannot find '$SolutionName
 Write-BuildMessage -Message "Restore NuGet development dependencies" -ForegroundColor "Cyan"
 Restore-NuGetDevelopmentPackages
 
-# Dot source Invoke-Build
-. (Join-Path (Get-PackageDir "Invoke-Build") "tools\Invoke-Build.ps1")
-
-# Define the default project
-Set-Project -Name $ProjectName
-
-# Invoke the build
+# Create the build script
 $private:BuildScript = New-Item -ItemType File -Name "$([System.IO.Path]::GetRandomFileName()).ps1" -Path $Env:Temp -Value {
     Import-Script Init -Safe
     Import-Properties -All
     . (Join-Path $BuildFullPath "build.ps1")
 }
-if ($Tree) {
-    Write-BuildMessage -Message "Show build task tree" -ForegroundColor "Cyan"
-    Import-Script Show-BuildTree
-    Show-BuildTree -File $BuildScript.FullName -Task $private:PaskTask
-} else {
-    Invoke-Build -File $BuildScript.FullName -Task $private:PaskTask -Result "!InvokeBuildResult!" -Safe:$private:PaskSafe -Summary:$private:PaskSummary
-    if ($private:PaskResult -and $private:PaskResult -is [string]) {
-        New-Variable -Name $private:PaskResult -Force -Scope 1 -Value ${!InvokeBuildResult!}
-    } elseif ($private:PaskResult) {
-        $private:PaskResult.Value = ${!InvokeBuildResult!}
-    }
-}
-Remove-Item $BuildScript.FullName -Force
 
-# By dot-sourcing Invoke-Build, the current location changes to $BuildRoot
-Set-Location -Path $private:CurrentLocation.Path
+try {
+    # Dot source Invoke-Build
+    . (Join-Path (Get-PackageDir "Invoke-Build") "tools\Invoke-Build.ps1")
+
+    # Define the default project
+    Set-Project -Name $ProjectName
+
+    # Invoke the build
+    if ($Tree) {
+        Write-BuildMessage -Message "Show build task tree" -ForegroundColor "Cyan"
+        Import-Script Show-BuildTree
+        Show-BuildTree -File $BuildScript.FullName -Task $private:PaskTask
+    } else {
+        Invoke-Build -File $BuildScript.FullName -Task $private:PaskTask -Result "!InvokeBuildResult!" -Safe:$private:PaskSafe -Summary:$private:PaskSummary
+        if ($private:PaskResult -and $private:PaskResult -is [string]) {
+            New-Variable -Name $private:PaskResult -Force -Scope 1 -Value ${!InvokeBuildResult!}
+        } elseif ($private:PaskResult) {
+            $private:PaskResult.Value = ${!InvokeBuildResult!}
+        }
+    }
+} catch {
+    throw $_
+} finally {
+    Remove-Item $BuildScript.FullName -Force
+    # By dot-sourcing Invoke-Build, the current location changes to $BuildRoot
+    Set-Location -Path $private:CurrentLocation.Path
+}
