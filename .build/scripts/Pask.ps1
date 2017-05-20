@@ -60,10 +60,22 @@ function script:Set-BuildProperty {
 
     $private:PropertyValue = switch ($PsCmdlet.ParameterSetName) {
         "ExplicitValue" { $Value }
-        "ValueOfSessionOrDefault" { Get-BuildProperty $Name $Default }
-        "ValueOfSession" { Get-BuildProperty $Name }
+        "ValueOfSessionOrDefault" { 
+            if (${!BuildProperties!}.Contains($Name)) {
+                ${!BuildProperties!}[$Name]
+            } else {
+                Get-BuildProperty $Name $Default 
+            }
+        }
+        "ValueOfSession" {
+            if (${!BuildProperties!}.Contains($Name)) {
+                ${!BuildProperties!}[$Name]
+            } else {
+                Get-BuildProperty $Name
+            }
+        }
     }
-   
+
     $private:VariableValue = if ($private:PropertyValue -and $private:PropertyValue.GetType() -eq [ScriptBlock]) { 
         & $private:PropertyValue 
     } else { 
@@ -827,9 +839,9 @@ function script:Set-Project {
         Write-BuildMessage "Cannot find project $Name" -ForegroundColor "Yellow"
         # Find first project in the solution
         $private:Project = Get-SolutionProjects | Select -First 1
+        Write-BuildMessage ("Using default project {0}" -f $private:Project.Name) -ForegroundColor "Yellow"
         Set-BuildProperty -Name ProjectName -Value $private:Project.Name
         Set-BuildProperty -Name ProjectFullPath -Value $private:Project.Directory
-        Write-BuildMessage "Using default project $script:ProjectName" -ForegroundColor "Yellow"
     } else {
         Write-BuildMessage "Setting default project $Name"
         Set-BuildProperty -Name ProjectName -Value $Name
@@ -837,7 +849,7 @@ function script:Set-Project {
     }
 
     Set-BuildProperty -Name ProjectFullName -Value (Get-ProjectFullName)
-    Set-BuildProperty -Name ArtifactName -Default $script:ProjectName
+    Set-BuildProperty -Name ArtifactName -Default { $ProjectName }
     Set-BuildProperty -Name ArtifactFullPath -Value { Join-Path $BuildOutputFullPath $ArtifactName }
 
     Update-Properties
