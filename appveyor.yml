@@ -17,6 +17,11 @@
     - path: .build\output\*.vsix
   deploy: off
   test: off
+  skip_commits:
+    files:
+      - appveyor.yml
+      - LICENSE
+      - README.md
 
 # configuration for branches
 -
@@ -34,3 +39,8 @@
     - path: .build\output\*.vsix
   deploy: off
   test: off
+  skip_commits:
+    files:
+      - appveyor.yml
+      - LICENSE
+      - README.md
